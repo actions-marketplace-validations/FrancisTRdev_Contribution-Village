@@ -1,8 +1,9 @@
 # Contribution-Village
 
-Turns a GitHub contribution graph into a little village.
+Turns a GitHub contribution graph into a little village. When GitHub is in dark mode, it's night in the village.
 
-<img width="1100" height="180" alt="image" src="https://github.com/user-attachments/assets/9530fc78-b53a-48c1-902d-3a80aec1fd74" />
+<img alt="image" src="./village.svg" />
+<img alt="image" src="./village-dark.svg" />
 
 
 | Contributions in a day | Tile |
@@ -33,20 +34,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: FrancisTRdev/Contribution-Village@v1
+      - uses: FrancisTRdev/Contribution-Village@V1
       - run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add village.svg
+          git add village.svg village-dark.svg
           git diff --cached --quiet && exit 0
           git commit -m 'Update village'
           git push
 ```
 
-Run it once from the **Actions** tab, then add the image to your profile README:
+Run it once from the **Actions** tab, then add the image to your profile README. Visitors using GitHub in dark mode see the night version.
 
-```markdown
-<img alt="Village" src="village.svg" />
+```html
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="village-dark.svg" />
+  <img alt="Contribution Village" src="village.svg" />
+</picture>
 ```
 
 ### Inputs
@@ -54,7 +58,7 @@ Run it once from the **Actions** tab, then add the image to your profile README:
 | Input | Default | Description |
 | --- | --- | --- |
 | `username` | Repository owner | GitHub user whose contribution graph becomes the village. |
-| `path` | `village.svg` | Where to write the SVG. Missing folders are created. |
+| `path` | `village.svg` | Where to write the SVG. The night version goes next to it, with `-dark` added to the name. Missing folders are created. |
 | `token` | The workflow's token | Used to read the graph from the GitHub GraphQL API. You don't need to set it. |
 
 ## Run it locally
@@ -65,4 +69,10 @@ Needs Node.js 18 or newer. There are no dependencies.
 node village.js <github-username> [output.svg]
 ```
 
-Without a token it reads your public contributions page, so there's nothing to set up. To read from the GitHub API like the Action does, set `GITHUB_TOKEN` to a personal access token first.
+This writes `village.svg` and the night version, `village-dark.svg`. Without a token it reads your public contributions page, so there's nothing to set up. To read from the GitHub API like the Action does, set `GITHUB_TOKEN` to a personal access token first.
+
+To try it out without anyone's data, use `--random` instead of a username. It makes up a contribution graph, so each run gives a different village.
+
+```sh
+node village.js --random [output.svg]
+```

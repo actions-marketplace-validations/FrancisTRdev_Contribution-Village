@@ -8,7 +8,7 @@ inputs:
     description: GitHub user whose contribution graph becomes the village.
     default: ${{ github.repository_owner }}
   path:
-    description: Where to write the SVG, relative to the workspace.
+    description: Where to write the SVG, relative to the workspace. The night version for dark mode goes next to it, with -dark added to the name.
     default: village.svg
   token:
     description: Token for reading the contribution graph from the GitHub API. The workflow's own token works.
